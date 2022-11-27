@@ -54,7 +54,7 @@ public class CalculatorView : MonoBehaviour
         else if(_y != null)
         {
             _x = _process.Result(Double.Parse(_x), Double.Parse(_y), _sing).ToString();
-            _viewData.text = _x;
+            _viewData.text = _x + sing;
             _viewResult.text = _x;
             _y = null;
         }
