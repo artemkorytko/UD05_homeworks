@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 13123b613d07a004d8ce6e06fd1bc3f5
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Australia Custom
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1574e61531b678a49bc5c72f677c45f3, type: 3}
+  - {fileID: 12800000, guid: 48b86eac78694ac439a686f0280cb4de, type: 3}
+  - {fileID: 12800000, guid: 8a557cb780e7416468a1b40f5ecc170a, type: 3}
+  - {fileID: 12800000, guid: 419e63f250776dc40a99dd8f3f30bdb4, type: 3}
+  - {fileID: 12800000, guid: 0936e168e0017754581c449c38fc19e0, type: 3}
+  - {fileID: 12800000, guid: 343c8be1e38068d42993366c2bdff1a0, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
