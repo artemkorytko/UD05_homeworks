@@ -25,36 +25,43 @@ namespace DefaultNamespace
             Prosto = '+';
             x = int.Parse(result.text);
             Clear();
-
         }
-
+        public void Divide()
+        {
+            Prosto = '/';
+            x = int.Parse(result.text);
+            Clear();
+        }
+        public void Umnozhit()
+        {
+            Prosto = '*';
+            x = int.Parse(result.text);
+            Clear();
+        }
+        public void Minus()
+        {
+            Prosto = '-';
+            x = int.Parse(result.text);
+            Clear();
+        }
+        
         public void Result()
         {
-
             y = int.Parse(result.text);
             switch (Prosto)
             {
                 case '+':
                     result.text = (x + y).ToString();
                     break;
-
-
-            }
-
-
-        }
-
-        public void Result1()
-        {
-
-            y = int.Parse(result.text);
-            switch (Prosto)
-            {
-                case '/':
+                case '/' :
                     result.text = (x / y).ToString();
                     break;
-
-
+                case '*' :
+                    result.text = (x * y).ToString();
+                    break;
+                case '-':
+                    result.text = (x - y).ToString();
+                    break;
             }
         }
     }
