@@ -9,12 +9,8 @@ public class DisplayController : MonoBehaviour
 {
     public Text displayText;
     public Calculator calculator;
-
-    void Start()
-    {
-        displayText = GameObject.Find("DisplayText").GetComponent<Text>();
-    }
-
+    
+    
     public void ClearDisplay()
     {
         displayText.text = "";

@@ -12,7 +12,7 @@ public partial class Calculator : MonoBehaviour
 {
     private static char[] chars = { '+', '-', '*', '/', '%' };
     public bool minusFlag = false;
-    public DisplayController dspController;
+    
 
     public double Calculate(string displayText)
     {
@@ -22,10 +22,10 @@ public partial class Calculator : MonoBehaviour
             minusFlag = true;                                                                                           //Установка флага умножения на минус и удаление минуса в начале строки
             displayText = displayText.Remove(0, 1);
         }
-        return doAction(displayText);
+        return DoAction(displayText);
     }
-    
-    public double doAction(string displayText)
+
+    private double DoAction(string displayText)
     {
         string[] str;
         char oper;
@@ -44,7 +44,7 @@ public partial class Calculator : MonoBehaviour
         {
             sum = 0;
         } else {
-            sum = calculateLogic(x,oper,y);
+            sum = CalculateLogic(x,oper,y);
         }
 
         minusFlag = false;                                                                                              //Обноление флага после нажатия равно
@@ -63,7 +63,7 @@ public partial class Calculator : MonoBehaviour
         return str[index];
     }
 
-    public double calculateLogic(double x,char oper,double y)
+    public double CalculateLogic(double x,char oper,double y)
     {
         double sum = 0;
         switch (oper)

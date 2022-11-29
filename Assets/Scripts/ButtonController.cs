@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class ButtonController : MonoBehaviour
 {
-    public string value;
+    [SerializeField] private string value;
 
-    public DisplayController displayController;
-
-    void Start() 
-    {
-        displayController = GameObject.Find("DisplayPanel").GetComponent<DisplayController>();
-    }
-
+    [SerializeField] private DisplayController displayController;
+    
+    
     public void AppendValueToDisplay()
     { 
         displayController.UpdateDisplayText(value);
