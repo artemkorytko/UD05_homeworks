@@ -5,9 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class calculator : MonoBehaviour
+public class Calculator : MonoBehaviour
 {
-    public TextMeshProUGUI InputText;
+    [SerializeField] private TextMeshProUGUI InputText;
     private double _result;
     private string _input1;
     private string _input2;
@@ -31,7 +31,6 @@ public class calculator : MonoBehaviour
     }
     public void ClickDelete(string del)//delete
     {
-        _del = del;
         InputText.text = "";
         _input1 = null;
         _input2 = null;
@@ -47,9 +46,11 @@ public class calculator : MonoBehaviour
 
     public void ClickEqual(string val)//решение
     {
-        double a = Double.Parse(_input1);
-        double b = double.Parse(_input2);
-        
+        if (_input1!=null && _input2!=null && _operator!= null)
+        {
+            double a = Double.Parse(_input1);
+            double b = double.Parse(_input2);
+
             switch (_operator)
             {
                 case "+":
@@ -65,9 +66,13 @@ public class calculator : MonoBehaviour
                     _result = a / b;
                     break;
             }
-
-            InputText.SetText($"{_result}");//вывод решения
-
+            InputText.SetText($"{_result}"); //вывод решения
+        }
+        else
+        {
+            InputText.SetText($"ошибка, введите все данные"); //вывод решения
+        }
+        
     }
     
 }
