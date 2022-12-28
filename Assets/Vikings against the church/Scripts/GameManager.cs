@@ -13,8 +13,8 @@ namespace Vikings_against_the_church.Scripts
         private Path _path;
         private Tower _tower;
         
-        private List<Viking> _vikings = new List<Viking>(10);
-        private List<Transform> _points = new List<Transform>(10);
+        private Stack<Viking> _vikings = new Stack<Viking>(10);
+        private Queue<Transform> _points = new Queue<Transform>(10);
 
         private void Awake()
         {
@@ -26,7 +26,7 @@ namespace Vikings_against_the_church.Scripts
         private void Start()
         {
             _vikings = _spawnVikings.GenereteVikings(_path.transform.childCount);
-            FillingListPoints();
+            FillingQueuePoints();
             StartMoveVikings();
         }
 
@@ -49,18 +49,17 @@ namespace Vikings_against_the_church.Scripts
 
         private void StartMoveVikings() 
         {
-            //foreach (var point in _points) { } // переделать под этот цикл, чтоб удалять точки 
-            for (int i = 0; i < _points.Count; i++)
+            foreach (var viking in _vikings)
             {
-                _vikings[i].SetTarget(_points[i].position);
+                viking.SetTarget(_points.Dequeue().position);
             }
         }
         
-        private void FillingListPoints()
+        private void FillingQueuePoints()
         {
             for (int i = 0; i < _path.transform.childCount; i++)
             {
-                _points.Add(_path.transform.GetChild(i));
+                _points.Enqueue(_path.transform.GetChild(i));
             }
         }
     }

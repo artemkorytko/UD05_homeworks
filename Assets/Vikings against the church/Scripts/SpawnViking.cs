@@ -11,15 +11,15 @@ namespace Vikings_against_the_church.Scripts
     {
         [SerializeField] private List<Viking> _vikings;
         
-        public List<Viking> GenereteVikings(int count)
+        public Stack<Viking> GenereteVikings(int count)
         {
-            List<Viking> vikings = new List<Viking>(count);
+            Stack<Viking> vikings = new Stack<Viking>(count);
 
             for (int i = 0; i < count; i++)
             {
                 var randomViking = Random.Range(0, _vikings.Count);
                 var viking = Instantiate(_vikings[randomViking].gameObject, transform).GetComponent<Viking>();
-                vikings.Add(viking);
+                vikings.Push(viking);
             }
 
             return vikings;

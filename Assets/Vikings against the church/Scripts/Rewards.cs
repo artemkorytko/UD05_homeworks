@@ -2,8 +2,10 @@
 
 namespace Vikings_against_the_church.Scripts
 {
-    public class Poit : MonoBehaviour
+    public class Rewards : MonoBehaviour
     {
+        private Coin[] _coins;
+        
         
     }
 }

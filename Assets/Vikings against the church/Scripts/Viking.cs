@@ -26,15 +26,15 @@ namespace Vikings_against_the_church.Scripts
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent(out Tower tower))
-                _target = tower.GetTrarget().transform.position;
+                _target = tower.GetTrargetCoin().transform.position;
             
 
-            if (other.TryGetComponent(out Coin coin))
-            {
-                _reward += coin.Reward;
-                _target = _firstPoint;
-                coin.gameObject.SetActive(false);
-            }
+            // if (other.TryGetComponent(out Coin coin))
+            // {
+            //     _reward += coin.Reward;
+            //     _target = _firstPoint;
+            //     coin.gameObject.SetActive(false);
+            // }
         }
 
         private void Move()

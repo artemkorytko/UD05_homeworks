@@ -35,7 +35,7 @@ namespace Vikings_against_the_church.Scripts
             }
         }
 
-        public Coin GetTrarget()
+        public Coin GetTrargetCoin()
         {
             return _queueCoins.Dequeue();
         }
