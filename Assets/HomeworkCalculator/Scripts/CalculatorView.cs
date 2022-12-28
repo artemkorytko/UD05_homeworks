@@ -15,6 +15,7 @@ public class CalculatorView : MonoBehaviour
     private char _sing = ' ';
     private bool _dataX;
     private CalculationProcess _process = new CalculationProcess();
+    
     public void InputNumberButtons(string data) // ввод чисел
     {
         if (!_dataX)
