@@ -7,19 +7,19 @@ using Random = UnityEngine.Random;
 
 namespace Vikings_against_the_church.Scripts
 {
-    public class SpawnViking : MonoBehaviour
+    public class SpawnVikings : MonoBehaviour
     {
         [SerializeField] private List<Viking> _vikings;
         
-        public Stack<Viking> GenereteVikings(int count)
+        public List<Viking> GenereteVikings(int count)
         {
-            Stack<Viking> vikings = new Stack<Viking>(count);
+            List<Viking> vikings = new List<Viking>(count);
 
             for (int i = 0; i < count; i++)
             {
                 var randomViking = Random.Range(0, _vikings.Count);
                 var viking = Instantiate(_vikings[randomViking].gameObject, transform).GetComponent<Viking>();
-                vikings.Push(viking);
+                vikings.Add(viking);
             }
 
             return vikings;

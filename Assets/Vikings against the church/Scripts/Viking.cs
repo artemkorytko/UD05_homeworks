@@ -12,6 +12,10 @@ namespace Vikings_against_the_church.Scripts
         private int _reward;
         private Vector3 _firstPoint;
 
+        public Vector3 FirstPoint => _firstPoint;
+        public string Name => _name;
+        public int Reward => _reward;
+
         private void Awake()
         {
             _firstPoint = transform.position; // это будет для возврата на карабль
@@ -28,13 +32,9 @@ namespace Vikings_against_the_church.Scripts
             if (other.TryGetComponent(out Tower tower))
                 _target = tower.GetTrargetCoin().transform.position;
             
+            if (other.TryGetComponent(out Coin coin))
+                _reward = coin.Reward;
 
-            // if (other.TryGetComponent(out Coin coin))
-            // {
-            //     _reward += coin.Reward;
-            //     _target = _firstPoint;
-            //     coin.gameObject.SetActive(false);
-            // }
         }
 
         private void Move()
