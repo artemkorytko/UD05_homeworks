@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,7 +15,7 @@ namespace Vikings_against_the_church.Scripts
             for (int i = 0; i < count; i++)
             {
                 var randomViking = Random.Range(0, _vikings.Count);
-                var viking = Instantiate(_vikings[randomViking].gameObject, transform).GetComponent<Viking>();
+                var viking = Instantiate(_vikings[randomViking].gameObject,transform.position, Quaternion.identity).GetComponent<Viking>();
                 vikings.Add(viking);
             }
 

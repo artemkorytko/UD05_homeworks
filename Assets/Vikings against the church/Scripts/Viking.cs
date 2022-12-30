@@ -9,12 +9,17 @@ namespace Vikings_against_the_church.Scripts
         [SerializeField] private float _speed = 3f;
         
         private Vector3 _target;
-        private int _reward;
         private Vector3 _firstPoint;
 
+        private int _reward;
+        private bool _isReturnInSpawnPiont = false;
+        private bool _isAttackTower = false;
+        
         public Vector3 FirstPoint => _firstPoint;
         public string Name => _name;
         public int Reward => _reward;
+        public bool IsReturnInSpawnPiont => _isReturnInSpawnPiont;
+        public bool IsAttackTower => _isAttackTower;
 
         private void Awake()
         {
@@ -29,12 +34,17 @@ namespace Vikings_against_the_church.Scripts
 
         private void OnTriggerEnter(Collider other)
         {
+            if (other.GetComponent<Point>())
+                _isAttackTower = true;
+            
             if (other.TryGetComponent(out Tower tower))
                 _target = tower.GetTrargetCoin().transform.position;
-            
-            if (other.TryGetComponent(out Coin coin))
-                _reward = coin.Reward;
 
+            if (other.TryGetComponent(out Coin coin))
+            {
+                _reward = coin.Reward;
+                _isReturnInSpawnPiont = true;
+            }
         }
 
         private void Move()
