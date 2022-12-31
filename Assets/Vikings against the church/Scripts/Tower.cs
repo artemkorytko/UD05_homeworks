@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -30,15 +29,12 @@ namespace Vikings_against_the_church.Scripts
         private void FillQueue()
         {
             for (int i = 0; i <_coins.Length; i++)
-            {
                 _queueCoins.Enqueue(_coins[i]);
-            }
         }
 
         public Coin GetTrargetCoin()
         {
             return _queueCoins.Dequeue();
         }
-
     }
 }

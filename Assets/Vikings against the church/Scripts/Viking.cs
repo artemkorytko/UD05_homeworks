@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Vikings_against_the_church.Scripts
 {
@@ -12,8 +11,8 @@ namespace Vikings_against_the_church.Scripts
         private Vector3 _firstPoint;
 
         private int _reward;
-        private bool _isReturnInSpawnPiont = false;
-        private bool _isAttackTower = false;
+        private bool _isReturnInSpawnPiont;
+        private bool _isAttackTower;
         
         public Vector3 FirstPoint => _firstPoint;
         public string Name => _name;
@@ -23,7 +22,7 @@ namespace Vikings_against_the_church.Scripts
 
         private void Awake()
         {
-            _firstPoint = transform.position; // это будет для возврата на карабль
+            _firstPoint = transform.position;
         }
 
         private void Update()

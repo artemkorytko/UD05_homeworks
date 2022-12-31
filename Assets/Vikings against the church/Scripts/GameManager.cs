@@ -21,37 +21,43 @@ namespace Vikings_against_the_church.Scripts
         private void Awake()
         {
             _tower = FindObjectOfType<Tower>();
-            _spawnVikingsPoint = FindObjectOfType<SpawnVikings>();
             _path = FindObjectOfType<Path>();
+            
+            _spawnVikingsPoint = FindObjectOfType<SpawnVikings>();
         }
         
         private void Start()
         {
-            _listVikings = _spawnVikingsPoint.GenereteVikings(_path.transform.childCount);
             FillingQueuePoints();
-            StartMoveVikings();
+            _spawnVikingsPoint.OnActiveMoveViking += StartMoveVikings;
         }
-        
+
+        private void OnDestroy()
+        {
+            _spawnVikingsPoint.OnActiveMoveViking -= StartMoveVikings;
+        }
+
         private void FillingQueuePoints()
         {
             for (int i = 0; i < _path.transform.childCount; i++)
-            {
                 _points.Enqueue(_path.transform.GetChild(i));
-            }
         }
         
         private void StartMoveVikings() 
         {
+            _listVikings = _spawnVikingsPoint.GenereteVikings(_path.transform.childCount);
+            
             foreach (var viking in _listVikings)
-            {
                 viking.SetTarget(_points.Dequeue().position);
-            }
+            
             StartCoroutine(Expectation());
         }
 
         private IEnumerator Expectation()
         {
             yield return new WaitUntil(()=> _listVikings[^1].IsAttackTower); // _listVikings[^1] - берет последний item 
+            yield return new WaitForSeconds(_delay);
+            
             yield return QueueVikingsAttackTower();
         }
 
@@ -62,6 +68,7 @@ namespace Vikings_against_the_church.Scripts
             {
                 viking.SetTarget(_tower.transform.position);
                 _stackVikings.Push(viking);
+                
                 yield return new WaitForSeconds(_delay);
             }
             
@@ -79,7 +86,5 @@ namespace Vikings_against_the_church.Scripts
                 yield return new WaitForSeconds(_delay);
             }
         }
-
-     
     }
 }
