@@ -6,6 +6,7 @@ namespace Vikings_against_the_church.Scripts
     {
         [SerializeField] private string _name = "None";
         [SerializeField] private float _speed = 3f;
+       
         
         private Vector3 _target;
         private Vector3 _firstPoint;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Vikings_against_the_church.Scripts.Viking2._0;
 
 namespace Vikings_against_the_church.Scripts
 {
@@ -13,10 +14,10 @@ namespace Vikings_against_the_church.Scripts
         private Path _path;
         private Tower _tower;
         
-        private List<Viking> _listVikings = new List<Viking>(10);
-        private Stack<Viking> _stackVikings = new Stack<Viking>(10);
+        private List<VikingController> _listVikings = new List<VikingController>(10);
+        private Stack<VikingController> _stackVikings = new Stack<VikingController>(10);
         private Queue<Transform> _points = new Queue<Transform>(10);
-        private Dictionary<int, string> _dictionaryRewards = new Dictionary<int, string>();
+        private Dictionary<int, string> _dictionaryRewards = new Dictionary<int, string>(10);
 
         private void Awake()
         {
@@ -48,7 +49,7 @@ namespace Vikings_against_the_church.Scripts
             _listVikings = _spawnVikingsPoint.GenereteVikings(_path.transform.childCount);
             
             foreach (var viking in _listVikings)
-                viking.SetTarget(_points.Dequeue().position);
+                viking.SetTarget(_points.Dequeue());
             
             StartCoroutine(Expectation());
         }
@@ -57,7 +58,7 @@ namespace Vikings_against_the_church.Scripts
         {
             yield return new WaitUntil(()=> _listVikings[^1].IsAttackTower); // _listVikings[^1] - берет последний item 
             yield return new WaitForSeconds(_delay);
-            
+
             yield return QueueVikingsAttackTower();
         }
 
@@ -66,7 +67,7 @@ namespace Vikings_against_the_church.Scripts
             var queue = _listVikings.OrderBy(viking => Vector3.Distance(viking.transform.position, _tower.transform.position)).ToList();
             foreach (var viking in queue)
             {
-                viking.SetTarget(_tower.transform.position);
+                viking.SetTarget(_tower.transform);
                 _stackVikings.Push(viking);
                 
                 yield return new WaitForSeconds(_delay);
@@ -80,10 +81,10 @@ namespace Vikings_against_the_church.Scripts
         {
             foreach (var viking in _stackVikings)
             {
+                yield return new WaitForSeconds(_delay);
                 _dictionaryRewards.TryAdd(viking.Reward, viking.Name);
               //  Debug.Log(_dictionaryRewards.Count);
-                viking.SetTarget(viking.FirstPoint);
-                yield return new WaitForSeconds(_delay);
+                viking.SetTarget(_spawnVikingsPoint.transform);
             }
         }
     }
