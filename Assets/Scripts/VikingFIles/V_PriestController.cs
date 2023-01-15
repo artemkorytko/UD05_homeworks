@@ -15,7 +15,7 @@ public class V_PriestController : MonoBehaviour
     private VikingsController _vikifile;
     
     private float moveSpeed = 5f; // скорость священника
-    private bool zamah = false; // флаг для поднятия канделябра - О_о пишет ошибку что не используется???
+    private bool zamah; // флаг для поднятия канделябра - О_о пишет ошибку что не используется???
 
     private bool isPressedSpace = false; // флаг нажатого пробела
 
