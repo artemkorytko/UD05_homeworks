@@ -16,34 +16,37 @@ using System.Runtime.InteropServices;
         [SerializeField] private GameObject _domino4;
         
         private ChainController _chainControllerFile;
+        private float _dominoSpeed;
+
+        private float _dominorotation = -60f;
+       
         
         private void Awake()
         {
             _chainControllerFile = FindObjectOfType<ChainController>();
-            //_chainControllerFile.GoDomino1 += Dominos1FallOrder;
+            _chainControllerFile.GoDomino1 += Dominos1FallOrder;
+
+            _dominoSpeed = _chainControllerFile.oneDominoFallsSpeed;
+            
         }
         
-        private void Dominos1Fall()
+        
+        private async void Dominos1FallOrder()
         {
-            //Dominos1FallOrder();
+            await _domino1.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino2.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino3.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino4.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
         }
+        
         
         private async void Start()
-        {
-            await Dominos1FallOrder();
-        }
+                { 
+                    
+                }
         
-        private async UniTask Dominos1FallOrder()
-        {
-            await _domino1.transform.DORotate(new Vector3(0, 0, -60), 0.5f);
-            await _domino2.transform.DORotate(new Vector3(0, 0, -60), 0.5f);
-            await _domino3.transform.DORotate(new Vector3(0, 0, -60), 0.5f);
-            await _domino4.transform.DORotate(new Vector3(0, 0, -60), 0.5f);
-        }
-        
-        // Update is called once per frame
         void OnDestroy()
         {
-            //_chainControllerFile.GoDomino1 -= Dominos1Fall;
+            _chainControllerFile.GoDomino1 -= Dominos1FallOrder;
         }
     }

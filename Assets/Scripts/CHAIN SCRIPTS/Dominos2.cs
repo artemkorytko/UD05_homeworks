@@ -19,39 +19,40 @@ using DG.Tweening;
         [SerializeField] private GameObject _domino8;
 
         private ChainController _chainControllerFile;
+        
+        private float _dominoSpeed;
+        private float _dominorotation;
 
         private void Awake()
         {
+            // подключаем главный файл и ждем оттуда событие
             _chainControllerFile = FindObjectOfType<ChainController>();
-            //_chainControllerFile.GoDomino2 += Dominos2Fall;
+            _chainControllerFile.GoDomino2 += Dominos2FallOrder;
+            
+            // скорость берем в главном файле
+            _dominoSpeed = _chainControllerFile.oneDominoFallsSpeed;
+            //------------ЗАДАЕМ ПОВТОРОТ-----------------
+            _dominorotation = 60f;
         }
 
-        private void Dominos2Fall()
+        
+        
+        private async void Dominos2FallOrder()
         {
-            Dominos2FallOrder();
-        }
-
-        private async void Start()
-        {
-            await Dominos2FallOrder();
-        }
-
-        private async UniTask Dominos2FallOrder()
-        {
-            await _domino1.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino2.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino3.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino4.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino5.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino6.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino7.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
-            await _domino8.transform.DORotate(new Vector3(0, 0, 60), 0.2f);
+            await _domino1.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino2.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino3.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino4.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino5.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino6.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino7.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            await _domino8.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
         }
 
         // Update is called once per frame
         void OnDestroy()
-        {
-           // _chainControllerFile.GoDomino1 -= Dominos1Fall;
+        { 
+            _chainControllerFile.GoDomino1 -= Dominos2FallOrder;
         }
     }
 
