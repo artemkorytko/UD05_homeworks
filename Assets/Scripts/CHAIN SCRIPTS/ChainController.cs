@@ -94,20 +94,24 @@ public class ChainController : MonoBehaviour
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (chainInProgress == false)
-                {
-                    ChainMotion();
-                }
-            }
+            // по нажатию пробела:
+            // if (Input.GetKeyDown(KeyCode.Space))
+            // {
+            //     if (chainInProgress == false)
+            //     {
+            //         ChainMotion();
+            //     }
+            // }
         }
         
         
 
         //------------ монстр-функция про всё по порядку-----------
-        private async void ChainMotion()
-        {
+        public async void ChainMotion()
+        { 
+            if (chainInProgress == false)
+                  {
+            
             chainInProgress = true;
             
             // просто ждем - юзер концентрирует внимание
@@ -207,30 +211,32 @@ public class ChainController : MonoBehaviour
 
             await GetEverythingBack();
         }
-
-        private async UniTask GetEverythingBack()
-        {
-            // отжимается кнопка 
-            await _button.transform.DOMove(_button.transform.position + _button.transform.up * 0.4f, 0.2f);
-
-            GetBack?.Invoke();
             
-            float vedrobackpos = _vedrostartpos.y; // до координат шарика
-           
-            await DOTween.Sequence()
-                .Append( _vedro.transform.DOMoveY(vedrobackpos, 1f))
-                .Join(_ball.transform.DOMoveY(vedrobackpos, 1f));
+            async UniTask GetEverythingBack()
+            {
+                // отжимается кнопка 
+                await _button.transform.DOMove(_button.transform.position + _button.transform.up * 0.4f, 0.2f);
 
-            await _brevno.transform.DORotate(new Vector3(0, 0, -17), 0.4f);
+                GetBack?.Invoke();
 
-            await _ball.transform.DOMove(_ballstartpos, 0.2f);
+                float vedrobackpos = _vedrostartpos.y; // до координат шарика
 
-            // !!!!!!!!! ТУТ МОЖНО ПРОСТО ПЕРЕЗАПУСТИТЬ АНИМАЦИЮ !!!!!!!!!!!!!
-            _balloonanimator.Rebind();
-            _balloonanimator.enabled = false;
+                await DOTween.Sequence()
+                    .Append(_vedro.transform.DOMoveY(vedrobackpos, 1f))
+                    .Join(_ball.transform.DOMoveY(vedrobackpos, 1f));
 
-            // возврат флага, по которому разришаем перезапускать анимацию
-            chainInProgress = false;
+                await _brevno.transform.DORotate(new Vector3(0, 0, -17), 0.4f);
+
+                await _ball.transform.DOMove(_ballstartpos, 0.2f);
+
+                // !!!!!!!!! ТУТ МОЖНО ПРОСТО ПЕРЕЗАПУСТИТЬ АНИМАЦИЮ !!!!!!!!!!!!!
+                _balloonanimator.Rebind();
+                _balloonanimator.enabled = false;
+
+                // возврат флага, по которому разришаем перезапускать анимацию
+                chainInProgress = false;
+                _fishAnimator.Rebind();
+            }// конец if
 
         }
 

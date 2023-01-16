@@ -44,15 +44,15 @@ public class AudioMamager : MonoBehaviour
 
         private void FishPlumsSound()
         {
-            _AudSo.PlayOneShot(_fishplums);
-            // StartCoroutine(FishSoundDelay());
-            //
-            // IEnumerator FishSoundDelay()
-            // {
-            //     
-            //     yield return new WaitForSeconds(0.1f); //это чуть меньше длины анимации рыбы
-            //     _AudSo.PlayOneShot(_fishplums);
-            // }
+            //_AudSo.PlayOneShot(_fishplums);
+            StartCoroutine(FishSoundDelay());
+            
+            IEnumerator FishSoundDelay()
+            {
+                
+                yield return new WaitForSeconds(0.2f); //это чуть меньше длины анимации рыбы
+                _AudSo.PlayOneShot(_fishplums);
+            }
         }
 
         
@@ -92,7 +92,7 @@ public class AudioMamager : MonoBehaviour
             
             IEnumerator BallVedroDelay()
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1f);
                 _AudSo.PlayOneShot(_ballinvedro);
             }
         }
