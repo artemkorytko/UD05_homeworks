@@ -23,6 +23,8 @@ using DG.Tweening;
         private float _dominoSpeed;
         private float _dominorotation;
 
+        public event Action Pum2;
+
         private void Awake()
         {
             // подключаем главный файл и ждем оттуда событие
@@ -41,13 +43,21 @@ using DG.Tweening;
         private async void Dominos2FallOrder()
         {
             await _domino1.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino2.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino3.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino4.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino5.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino6.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino7.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
             await _domino8.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum2?.Invoke();
         }
 
         private async void GetDomino2Back()

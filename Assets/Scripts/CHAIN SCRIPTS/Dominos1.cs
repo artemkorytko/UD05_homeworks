@@ -19,8 +19,8 @@ using System.Runtime.InteropServices;
         private float _dominoSpeed;
 
         private float _dominorotation = -60f;
-       
-        
+
+        public event Action Pum1; //передаем в аудоименеджер
         private void Awake()
         {
             _chainControllerFile = FindObjectOfType<ChainController>();
@@ -35,9 +35,13 @@ using System.Runtime.InteropServices;
         private async void Dominos1FallOrder()
         {
             await _domino1.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum1?.Invoke();
             await _domino2.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum1?.Invoke();
             await _domino3.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum1?.Invoke();
             await _domino4.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
+            Pum1?.Invoke();
         }
 
 

@@ -43,6 +43,15 @@ public class ChainController : MonoBehaviour
 
         public event Action GetBack;
 
+        //---- события для звуков---------
+        public event Action FishFalls;
+        public event Action Squish;
+        public event Action Pop;
+        public event Action Bums;
+        public event Action BallinVedro;
+        public event Action PinkButtonPressed;
+        
+        //---- позиции объектов для возврата на место -------
         private Vector3 _fishstartpos;
         private Vector3 _vedrostartpos;
         private Vector3 _balloonpos;
@@ -75,14 +84,11 @@ public class ChainController : MonoBehaviour
 
         private async void Start()
         {  
-            
-            // ? ДОПИСАТЬ ВЕРЕВКУ К ВЕДРУ - пока не могку саместить точку опоры у веревки
-
-            
-            // пришлось писать сюда, хотя хотела на кнопку, дабы юзер хоть что-то делал
-            //await ChainMotion();
-            
-            
+            // ????????????????????????????????????????????????????????
+            // ??????? что надо было написать на рыбу
+            // чтобы из нее сделать кнопку,
+            // если в компоненте button не появляются функции из этого файла
+            // ????????????????????????????????????????????????????????
             //_startbutton.onClick.AddListener(ChainMotion);
         }
 
@@ -107,7 +113,10 @@ public class ChainController : MonoBehaviour
             // просто ждем - юзер концентрирует внимание
             await UniTask.Delay(TimeSpan.FromSeconds(1));
             
+            
             // рыба падает до бревна
+            FishFalls?.Invoke(); // звук заранее переадается в аудоменеджер, где откладывается корутиной
+            // тут можно завести переменную для аудиофайла...
             await _fish.transform.DOMove(_fish.transform.position + -_fish.transform.up * 1.65f, 0.5f);
             
             // анимация плюхания рыбы
@@ -116,12 +125,15 @@ public class ChainController : MonoBehaviour
             
             // бревно наклоняется, рыба лежит на нём
             await DOTween.Sequence()
+                .AppendCallback(SquishInvokeFunction)
                 .Append(_fish.transform.DOMove(_fish.transform.position + -_fish.transform.up * 1.9f, 0.6f))
-                .Join(_brevno.transform.DORotate(new Vector3(0, 0, 17), 0.4f));
+                .Join(_brevno.transform.DORotate(new Vector3(0, 0, 17), 0.4f))
+                ;
             
             // не получилось сделать статичную анимацию *facepalm* и к ней обратьиться, поэтому тасуем чайлдов рыбы
             _animatedfish.enabled = false;
             _staticfish.enabled = true;
+            PinkButtonPressed?.Invoke();
             
             GoDomino1?.Invoke();
             // у нас три секунды пока падает домино
@@ -135,7 +147,7 @@ public class ChainController : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(oneDominoFallsSpeed * 4)); // 4 шт домино
             
             
-
+            BallinVedro?.Invoke(); //звук
             // шарик катится к краю
             await DOTween.Sequence()
                     .Append( _ball.transform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360))
@@ -143,17 +155,22 @@ public class ChainController : MonoBehaviour
             
             //-------------------------- нижний уровень --------------------------------------------------------
             // шарик падает
+            
             await _ball.transform.DOMove(_ball.transform.position - _ball.transform.up * 2.4f, 1).SetEase(Ease.InQuad);
             
             // опускается ведро и шарик в нем
             float lowerrowY = _balloon.transform.position.y + 1.3f; // до координат шарика
-           
+            
+            Squish?.Invoke();
             await DOTween.Sequence()
-                 .Append( _vedro.transform.DOMoveY(lowerrowY, 0.6f).SetEase(Ease.OutBounce))
-                 .Join(_ball.transform.DOMoveY(lowerrowY, 0.6f).SetEase(Ease.OutBounce));
+                //.AppendCallback(SquishInvokeFunction)
+                .Append(_vedro.transform.DOMoveY(lowerrowY, 0.6f).SetEase(Ease.OutBounce))
+                .Join(_ball.transform.DOMoveY(lowerrowY, 0.6f).SetEase(Ease.OutBounce))
+                ;
             
             // воздушный шар взрывается
             _balloonanimator.enabled = true;
+            Pop?.Invoke();
             
             // домино 2 получает событие и запускает юнитаск
             GoDomino2?.Invoke();
@@ -173,14 +190,15 @@ public class ChainController : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(oneDominoFallsSpeed * 8)); // 8 шт домино
             
             // нажимается кнопка 
+            PinkButtonPressed?.Invoke();
             await _button.transform.DOMove(_button.transform.position + -_button.transform.up * 0.4f, 0.2f);
 
             // пушка и рыба в ней смещается вниз стреляет рыбой вверх
             await DOTween.Sequence()
                 .Append(_pushka.transform.DOMove(_pushka.transform.position + -_pushka.transform.up * 0.4f, 0.2f))
                 .Join(_fish.transform.DOMove(_fish.transform.position + -_fish.transform.up * 0.4f, 0.2f));
+            Bums?.Invoke(); //звук взрыва в аудои
 
-           
             // рыба стреляется обратно наверх, пушка в исходное // УДАЛОСЬ на 360!
             await DOTween.Sequence()
                 .Append(_fish.transform.DOMove(_fishstartpos, 1f).SetEase(Ease.OutCubic))
@@ -206,11 +224,8 @@ public class ChainController : MonoBehaviour
             await _brevno.transform.DORotate(new Vector3(0, 0, -17), 0.4f);
 
             await _ball.transform.DOMove(_ballstartpos, 0.2f);
-            // новый шарик берем из префаба ибо я не умею возвращать анимацию
-            // ????????????????????????????????????????????????????????????????????????
-            // ??????????????? ТУТ МОЖНО ПРОСТО ПЕРЕЗАПУСТИТЬ АНИМАЦИЮ ????????????????
-            // ????????????????????????????????????????????????????????????????????????
-            // что писать в скобочки???? _balloonanimator.ResetTrigger();
+
+            // !!!!!!!!! ТУТ МОЖНО ПРОСТО ПЕРЕЗАПУСТИТЬ АНИМАЦИЮ !!!!!!!!!!!!!
             _balloonanimator.Rebind();
             _balloonanimator.enabled = false;
 
@@ -219,6 +234,9 @@ public class ChainController : MonoBehaviour
 
         }
 
-        
-
+        // отдельные для звуков чтобы одновременно с анимашкой
+        private void SquishInvokeFunction()
+        {
+            Squish?.Invoke();
+        }
     }
