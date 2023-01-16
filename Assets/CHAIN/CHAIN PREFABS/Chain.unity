@@ -473,6 +473,7 @@ MonoBehaviour:
   _balloon: {fileID: 1007468605}
   _button: {fileID: 96771973}
   _pushka: {fileID: 324974846}
+  _helpquote: {fileID: 1896785609}
   oneDominoFallsSpeed: 0.2
 --- !u!1 &324974846
 GameObject:
@@ -1779,7 +1780,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 84506305d8e0e446d849dd077e73c190, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1818,7 +1819,7 @@ GameObject:
   - component: {fileID: 1896785610}
   - component: {fileID: 1896785609}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: press fish Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2158,6 +2159,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1890211924294433564, guid: fbe38900c8903430fbd7e404e6577d57, type: 3}
+      propertyPath: m_SortingOrder
+      value: -5
+      objectReference: {fileID: 0}
     - target: {fileID: 1890211924294433566, guid: fbe38900c8903430fbd7e404e6577d57, type: 3}
       propertyPath: m_Name
       value: BALLOON animated
@@ -2379,6 +2384,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8111084013326909957, guid: 8e8cfcfd5dd7c411abc67fb5132f009b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111084014065537265, guid: 8e8cfcfd5dd7c411abc67fb5132f009b, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8111084014065537266, guid: 8e8cfcfd5dd7c411abc67fb5132f009b, type: 3}
