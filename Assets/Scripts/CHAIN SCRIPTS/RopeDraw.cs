@@ -6,8 +6,7 @@ using UnityEngine;
 public class RopeDraw : MonoBehaviour
 {
     private LineRenderer _lineRenderer;
-    private float _counter;
-    private float _dist;
+   
 
     // подключить точки, между которыми линия
     [SerializeField] private GameObject _startpoint;
@@ -30,7 +29,8 @@ public class RopeDraw : MonoBehaviour
     {
         // индекс - это номер точки, между которыми линия: 0,1
         _lineRenderer.SetPosition(0, _startpointposition);
-        _dist = Vector3.Distance(_startpointposition, _endpoint.transform.position);
+        
+        //_dist = Vector3.Distance(_startpointposition, _endpoint.transform.position);
     }
 
     

@@ -5,9 +5,10 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEditor;
 
 
-    public class ChainController : MonoBehaviour
+public class ChainController : MonoBehaviour
     {
         // висит на всей сцене CHAIN
         [SerializeField] private Button _startbutton;
@@ -40,8 +41,15 @@ using DG.Tweening;
         // public event Action <UniTask> GoDomino1; //<----- от АК но я так не напишу сама
         public event Action GoDomino2;
 
+        public event Action GetBack;
+
         private Vector3 _fishstartpos;
-        
+        private Vector3 _vedrostartpos;
+        private Vector3 _balloonpos;
+        private Vector3 _ballstartpos;
+
+        // флаг шоб не жали, пока идет анимация:
+        private bool chainInProgress = false;
 
         private void Awake()
         {
@@ -56,6 +64,12 @@ using DG.Tweening;
             _staticfish.enabled = false;
             _fishstartpos = _fish.transform.position;
             // ротейшен не берется
+
+            _vedrostartpos = _vedro.transform.position;
+            //_startbutton = GetComponent<Button>();
+
+            _ballstartpos = _ball.transform.position;
+
         }
 
 
@@ -66,22 +80,30 @@ using DG.Tweening;
 
             
             // пришлось писать сюда, хотя хотела на кнопку, дабы юзер хоть что-то делал
-            await ChainMotion();
+            //await ChainMotion();
+            
+            
+            //_startbutton.onClick.AddListener(ChainMotion);
         }
 
         private void Update()
         {
-            // тут найти про кнопку и запустить функцию шоб все задвигалось
-
-            //??????????????????????????????????????????????
-            // как приделать код юнитаска к кнопке????
-            //??????????????????????????????????????????????
-            //_startbutton.onClick.AddListener(ChainMotion);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (chainInProgress == false)
+                {
+                    ChainMotion();
+                }
+            }
         }
+        
+        
 
         //------------ монстр-функция про всё по порядку-----------
-        private async UniTask ChainMotion()
+        private async void ChainMotion()
         {
+            chainInProgress = true;
+            
             // просто ждем - юзер концентрирует внимание
             await UniTask.Delay(TimeSpan.FromSeconds(1));
             
@@ -119,23 +141,33 @@ using DG.Tweening;
                     .Append( _ball.transform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360))
                     .Join(_ball.transform.DOMove(_ball.transform.position + _ball.transform.right * 1.7f, 0.5f));
             
+            //-------------------------- нижний уровень --------------------------------------------------------
             // шарик падает
-            await _ball.transform.DOMove(_ball.transform.position - _ball.transform.up * 2.4f, 1);//.SetEase(Ease.InQuad);
+            await _ball.transform.DOMove(_ball.transform.position - _ball.transform.up * 2.4f, 1).SetEase(Ease.InQuad);
             
             // опускается ведро и шарик в нем
-            float lowerrowY = _balloon.transform.position.y + 0.7f; // до координат шарика
-            float ropetarget = lowerrowY - 0.5f;
+            float lowerrowY = _balloon.transform.position.y + 1.3f; // до координат шарика
+           
             await DOTween.Sequence()
-                 .Append( _vedro.transform.DOMoveY(lowerrowY, 1).SetEase(Ease.InQuad))
-                 .Join(_ball.transform.DOMoveY(lowerrowY, 1).SetEase(Ease.InQuad));
-            
-            
+                 .Append( _vedro.transform.DOMoveY(lowerrowY, 0.6f).SetEase(Ease.OutBounce))
+                 .Join(_ball.transform.DOMoveY(lowerrowY, 0.6f).SetEase(Ease.OutBounce));
             
             // воздушный шар взрывается
             _balloonanimator.enabled = true;
             
             // домино 2 получает событие и запускает юнитаск
             GoDomino2?.Invoke();
+            
+            // ждём анимацию шарика
+            await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
+            
+            // ведро опускается ниже после взрыва воздушного шарика
+            lowerrowY = _balloon.transform.position.y + 0.5f; // до координат шарика
+           
+            await DOTween.Sequence()
+                .Append( _vedro.transform.DOMoveY(lowerrowY, 0.4f))
+                .Join(_ball.transform.DOMoveY(lowerrowY, 0.4f));
+            
             
             // ждём пока домино там усебя попадают
             await UniTask.Delay(TimeSpan.FromSeconds(oneDominoFallsSpeed * 8)); // 8 шт домино
@@ -154,10 +186,39 @@ using DG.Tweening;
                 .Append(_fish.transform.DOMove(_fishstartpos, 1f).SetEase(Ease.OutCubic))
                 .Join(_pushka.transform.DOMove(_pushka.transform.position + _pushka.transform.up * 0.4f, 0.2f))
                 .Join(_fish.transform.DORotate(new Vector3(0, 0, 360f), 1f,  RotateMode.FastBeyond360));
-                
+
+            await GetEverythingBack();
         }
 
+        private async UniTask GetEverythingBack()
+        {
+            // отжимается кнопка 
+            await _button.transform.DOMove(_button.transform.position + _button.transform.up * 0.4f, 0.2f);
 
+            GetBack?.Invoke();
+            
+            float vedrobackpos = _vedrostartpos.y; // до координат шарика
+           
+            await DOTween.Sequence()
+                .Append( _vedro.transform.DOMoveY(vedrobackpos, 1f))
+                .Join(_ball.transform.DOMoveY(vedrobackpos, 1f));
 
+            await _brevno.transform.DORotate(new Vector3(0, 0, -17), 0.4f);
+
+            await _ball.transform.DOMove(_ballstartpos, 0.2f);
+            // новый шарик берем из префаба ибо я не умею возвращать анимацию
+            // ????????????????????????????????????????????????????????????????????????
+            // ??????????????? ТУТ МОЖНО ПРОСТО ПЕРЕЗАПУСТИТЬ АНИМАЦИЮ ????????????????
+            // ????????????????????????????????????????????????????????????????????????
+            // что писать в скобочки???? _balloonanimator.ResetTrigger();
+            _balloonanimator.Rebind();
+            _balloonanimator.enabled = false;
+
+            // возврат флага, по которому разришаем перезапускать анимацию
+            chainInProgress = false;
+
+        }
+
+        
 
     }

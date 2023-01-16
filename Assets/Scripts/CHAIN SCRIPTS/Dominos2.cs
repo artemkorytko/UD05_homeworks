@@ -28,6 +28,7 @@ using DG.Tweening;
             // подключаем главный файл и ждем оттуда событие
             _chainControllerFile = FindObjectOfType<ChainController>();
             _chainControllerFile.GoDomino2 += Dominos2FallOrder;
+            _chainControllerFile.GetBack += GetDomino2Back;
             
             // скорость берем в главном файле
             _dominoSpeed = _chainControllerFile.oneDominoFallsSpeed;
@@ -49,10 +50,23 @@ using DG.Tweening;
             await _domino8.transform.DORotate(new Vector3(0, 0, _dominorotation), _dominoSpeed);
         }
 
+        private async void GetDomino2Back()
+        {
+            await _domino1.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino2.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino3.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino4.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino5.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino6.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino7.transform.DORotate(Vector3.zero, _dominoSpeed);
+            await _domino8.transform.DORotate(Vector3.zero, _dominoSpeed);
+        }
+        
         // Update is called once per frame
         void OnDestroy()
         { 
             _chainControllerFile.GoDomino1 -= Dominos2FallOrder;
+            _chainControllerFile.GetBack -= GetDomino2Back;
         }
     }
 
