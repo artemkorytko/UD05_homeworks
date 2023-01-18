@@ -21,10 +21,12 @@ namespace Scripts.PR
 
         private async UniTask Shoot()
         {
-            await _mySequence.Append(robber.DORotate(new Vector3(0, 0, 50), 2f))
+             _mySequence.Append(robber.DORotate(new Vector3(0, 0, 50), 2f))
                 .Join(bullet.DOMove(target.position, 2f));
-            
-            await _mySequence.Append(robber.DORotate(new Vector3(0, 0, 0), 2));
+             
+             _mySequence.Append(robber.DORotate(new Vector3(0, 0, 0), 2));
+
+             await _mySequence;
         }
         
     }

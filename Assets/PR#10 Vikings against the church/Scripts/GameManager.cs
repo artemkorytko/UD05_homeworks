@@ -34,8 +34,8 @@ namespace Vikings_against_the_church.Scripts
         {
             FillingQueuePoints();
             
-            await _shipSpawnVikingsPoint.transform.DOMove(targetShip.position, durationMoveShip);
-            await MoveVikingsToPoint();
+            await _shipSpawnVikingsPoint.transform.DOMove(targetShip.position, durationMoveShip); 
+            MoveVikingsToPoint();
             await Expectation();
             await QueueVikingsAttackTower();
             await ReturnVikingsInSpawnPiont();
@@ -54,14 +54,12 @@ namespace Vikings_against_the_church.Scripts
                 _points.Enqueue(_path.transform.GetChild(i));
         }
         
-        private async UniTask MoveVikingsToPoint() 
+        private void MoveVikingsToPoint() 
         {
             _listVikings = _shipSpawnVikingsPoint.GenereteVikings(_path.transform.childCount);
             
             foreach (var viking in _listVikings)
                 viking.SetTarget(_points.Dequeue());
-            
-            await UniTask.Yield();
         }
 
         private async UniTask Expectation()
