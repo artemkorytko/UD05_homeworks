@@ -17,26 +17,11 @@ namespace DogOOP
         private void Awake()
         {
             base.Awake();
-            _rotateSpeed = configDog.RotateSpeed;
+            _rotateSpeed = config.RotateSpeed;
             _joystick = FindObjectOfType<Joystick>();
         }
         
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space) && _counter >= _delayBetweenAttack)
-            {
-                _counter = 0;
-                Attack();
-            }
-            _counter += Time.deltaTime; 
-            
-            _animator.SetFloat(Speed, _joystick.Direction.magnitude);
-            if (_joystick.Direction != Vector2.zero)
-                Move();
-
-        }
         
-
         protected override void Attack()
         {
             if (!_isAttack)
@@ -51,13 +36,28 @@ namespace DogOOP
             }
         }
 
+        protected override void DoAction()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && _counter >= config.DelayBetweenAttack)
+            {
+                _counter = 0;
+                Attack();
+            }
+            _counter += Time.deltaTime; 
+            
+            _animator.SetFloat(Speed, _joystick.Direction.magnitude);
+            if (_joystick.Direction != Vector2.zero)
+                Move();
+
+        }
+
         private void Move()
         {
             var direction = new Vector3(_joystick.Direction.x, 0, _joystick.Direction.y); 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), _rotateSpeed * Time.deltaTime); 
             
             var magnitude = _joystick.Direction.magnitude; 
-            transform.position += transform.forward * (_speed * Time.deltaTime * magnitude); 
+            transform.position += transform.forward * (config.Speed * Time.deltaTime * magnitude); 
         }
         
     

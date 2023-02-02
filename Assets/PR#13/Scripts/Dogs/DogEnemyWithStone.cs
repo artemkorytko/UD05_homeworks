@@ -21,40 +21,18 @@ namespace DogOOP
          private void Awake()
          {
              base.Awake();
-             _radius = configDog.Radius;
+             _radius = config.Radius;
          }
 
          private void Start()
          {
              _startPoint = Vector3.zero - transform.position;
          }
-
-         private void Update()
-         {
-             _prefPosition -= transform.position;
-             _counter += Time.deltaTime;
-             _animator.SetFloat(Speed, _prefPosition.magnitude);
-
-             if (!_target)
-             {
-                 CircleMove();
-                 SearchPlayer();
-                 return;
-             }
-             _prefPosition = transform.position;
-             
-             if(_counter >= _delayBetweenAttack)
-             {
-                 transform.rotation = Quaternion.LookRotation(_target.transform.position);
-                 _animator.SetTrigger(Attack02);
-                 _counter = 0;
-                 Attack();
-             }
-         }
+         
          
         private void CircleMove()
         {
-            _angle += Time.deltaTime * _speed;
+            _angle += Time.deltaTime * config.Speed;
             
             var transformPosition = transform.position;
             
@@ -70,6 +48,30 @@ namespace DogOOP
         {
             var stone = Instantiate(prefabStone.gameObject, transformThrow.position, Quaternion.identity);
             stone.transform.DOJump(_target.transform.position, 3, 1,1).SetEase(Ease.OutQuad);
+        }
+
+        protected override void DoAction()
+        {
+            _prefPosition -= transform.position;
+            _counter += Time.deltaTime;
+            _animator.SetFloat(Speed, _prefPosition.magnitude);
+
+            if (!_target)
+            {
+                CircleMove();
+                SearchPlayer();
+                return;
+            }
+            _prefPosition = transform.position;
+             
+            if(_counter >= config.DelayBetweenAttack)
+            {
+                var direction = _target.transform.position - transform.position;
+                transform.rotation = Quaternion.LookRotation(direction);
+                _animator.SetTrigger(Attack02);
+                _counter = 0;
+                Attack();
+            }
         }
     }
 }

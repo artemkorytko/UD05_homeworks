@@ -11,14 +11,12 @@ namespace DogOOP.Base
 {
     public abstract class DogsBase : MonoBehaviour
     {
-        [SerializeField] protected ConfigDog configDog;
-        
-        protected int _health;
-        protected float _speed;
-        protected float _delayBetweenAttack = 2f;
-        
+        [SerializeField] protected ConfigDog config;
+
         protected Animator _animator;
         protected PlayerController _target;
+
+        private int _currentHealth;
         
         protected static readonly int Speed = Animator.StringToHash("Speed");
         protected static readonly int Die = Animator.StringToHash("Die");
@@ -29,20 +27,7 @@ namespace DogOOP.Base
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
-            
-            _health = configDog.Health;
-            _speed = configDog.Speed;
-            _delayBetweenAttack = configDog.DelayBetweenAttack;
-        }
-        
-        private void ApplayDamage(int damage)
-        {
-            _health -= damage;
-            
-            if(_health <= 0)
-                Died();
-            
-            _animator.SetTrigger(GetHit);
+            _currentHealth = config.Health;
         }
         
         private void OnTriggerEnter(Collider other)
@@ -61,6 +46,21 @@ namespace DogOOP.Base
                         break;
                 }
             }
+        }
+
+        private void Update()
+        {
+            DoAction();
+        }
+
+        private void ApplayDamage(int damage)
+        {
+            _currentHealth -= damage;
+            
+            if(_currentHealth <= 0)
+                Died();
+            
+            _animator.SetTrigger(GetHit);
         }
         
         private void Died()
@@ -88,6 +88,8 @@ namespace DogOOP.Base
         }
         
         protected abstract void Attack();
-        
+
+        protected abstract void DoAction();
+
     }
 }

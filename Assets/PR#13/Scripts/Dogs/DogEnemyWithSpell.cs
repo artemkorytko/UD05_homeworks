@@ -17,7 +17,7 @@ namespace DogOOP
         private void Awake()
         {
             base.Awake();
-            _rotateSpeed = configDog.RotateSpeed;
+            _rotateSpeed = config.RotateSpeed;
         }
 
         private void Start()
@@ -25,23 +25,6 @@ namespace DogOOP
             MoveRotate();
         }
         
-        private void Update()
-        {
-            if (!_target)
-            {
-                SearchPlayer();
-                return;
-            }
-            
-            transform.rotation = Quaternion.LookRotation(_target.transform.position);
-            _counter += Time.deltaTime;
-            if (_counter >= _delayBetweenAttack)
-            {
-                Attack();
-                _counter = 0;
-            }
-
-        }
         
         private async UniTask MoveRotate()
         {
@@ -59,6 +42,26 @@ namespace DogOOP
             var spell = Instantiate(spellPrefab.gameObject, transform.position + transform.forward,
                 Quaternion.identity);
             spell.transform.DOMove(_target.transform.position, 2);
+        }
+
+        protected override void DoAction()
+        {
+            if (!_target)
+            {
+                SearchPlayer();
+                return;
+            }
+            
+            var direction = _target.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(direction);
+            _counter += Time.deltaTime;
+            
+            if (_counter >= config.DelayBetweenAttack)
+            {
+                _counter = 0;
+                Attack();
+            }
+
         }
     }
 }
