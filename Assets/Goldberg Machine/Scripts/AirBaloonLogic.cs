@@ -7,12 +7,15 @@ namespace Goldberg_Machine.Scripts
     {
         [SerializeField] private GameObject _button;
         private ButtonLogic _buttonLogic;
-        private Rigidbody _rig;
+        private Vector3 _rotationAxis = new Vector3(0, 0, -1);
+        [SerializeField] private float FlightDuration = 8f;
+        [SerializeField] private float FlightEndHeight = -5f;
+        [SerializeField] private float RotateDuration = 3f;
+        [SerializeField] private float RotateAngle = 45f;
 
         private void Awake()
         {
             _buttonLogic = _button.GetComponentInChildren<ButtonLogic>();
-            _rig = gameObject.GetComponent<Rigidbody>();
         }
         
         private void Start()
@@ -27,10 +30,9 @@ namespace Goldberg_Machine.Scripts
 
         private void Fly()
         {
-            _rig.isKinematic = false;
             DOTween.Sequence()
-                .Append(transform.DOMoveY(-45, 8, false))
-                .Append(transform.DOMoveY(-5, 10, false));
+                .Append(transform.DOMoveY(FlightEndHeight, FlightDuration, false))
+                .Append(transform.DORotate(transform.eulerAngles + Quaternion.AngleAxis(RotateAngle, _rotationAxis).eulerAngles, RotateDuration, RotateMode.Fast));
         }
     }
 }

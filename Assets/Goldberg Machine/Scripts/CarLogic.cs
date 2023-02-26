@@ -8,6 +8,12 @@ namespace Goldberg_Machine.Scripts
     {
         [SerializeField] private GameObject _button;
         private ButtonLogic _buttonLogic;
+        private Vector3 _rotationAxis = new Vector3(0, 0, -1);
+        [SerializeField] private float MoveEndPos = 40f;
+        [SerializeField] private float MoveDuration = 5f;
+        [SerializeField] private float RotateAngle = 90f;
+        [SerializeField] private float RotateDuration = 3f;
+        
 
         private void Awake()
         {
@@ -26,7 +32,10 @@ namespace Goldberg_Machine.Scripts
 
         private void StartEngine()
         {
-            transform.DOMoveX(45, 8, false);
+            DOTween.Sequence()
+                .Append(transform.DOMoveX(MoveEndPos, MoveDuration, false))
+                .Append(transform.DORotate(transform.eulerAngles + Quaternion.AngleAxis(RotateAngle, _rotationAxis).eulerAngles, RotateDuration, RotateMode.Fast));
+
         }
     }
 }
